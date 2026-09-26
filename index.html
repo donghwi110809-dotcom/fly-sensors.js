@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+  <title>FlyBrain × Microsoft Edge S.U.R.F.</title>
+
+  <!-- S.U.R.F. CSS -->
+  <link rel="stylesheet" href="./resources/css/interface.css">
+
+  <!-- S.U.R.F. 기본 스크립트 -->
+  <script src="./resources/js/base-error-reporting.js"></script>
+  <script src="./resources/js/surf-error-reporting.js"></script>
+  <script src="./resources/js/assert.js"></script>
+  <script src="./resources/js/promise_resolver.js"></script>
+  <script src="./resources/js/cr.js"></script>
+  <script src="./resources/js/parse_html_subset.js"></script>
+  <script src="./resources/js/load_time_data.js"></script>
+  <script src="./resources/js/util.js"></script>
+  <script src="./resources/js/strings.js"></script>
+</head>
+
+<body>
+
+  <!-- S.U.R.F.가 사용하는 영역 -->
+  <div id="hamburger-container"></div>
+  <div id="modal-root"></div>
+
+  <!-- S.U.R.F. 게임 -->
+  <script defer src="./resources/js/lib_react.chunk.js"></script>
+  <script defer src="./resources/js/lib_common.chunk.js"></script>
+  <script defer src="./resources/js/surf.bundle.js"></script>
+
+  <!--
+    ============================
+       🪰 FlyBrain AI
+    ============================
+    순서 바꾸지 말 것
+  -->
+
+  <!-- 감각 -->
+  <script src="./fly-sensors.js"></script>
+
+  <!-- 신경망 -->
+  <script src="./fly-brain.js"></script>
+
+  <!-- 학습 -->
+  <script src="./fly-learning.js"></script>
+
+  <!-- 게임 제어 + AI 패널 -->
+  <script src="./fly-controller.js"></script>
+
+</body>
+</html>
