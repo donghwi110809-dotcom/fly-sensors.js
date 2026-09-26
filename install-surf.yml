@@ -1,0 +1,38 @@
+name: SURF 게임 설치하기
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 내 저장소 불러오기
+        uses: actions/checkout@v4
+
+      - name: S.U.R.F. 원본 다운로드
+        run: |
+          git clone --depth 1 https://github.com/jackbuehner/MicrosoftEdge-Surf.git /tmp/surf
+
+      - name: S.U.R.F. 파일 설치
+        run: |
+          cp -R /tmp/surf/resources ./resources
+          cp /tmp/surf/index.html ./surf-original.html
+
+      - name: 변경사항 저장
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add resources surf-original.html
+
+          if git diff --cached --quiet; then
+            echo "변경사항 없음"
+          else
+            git commit -m "Install Microsoft Edge S.U.R.F. resources"
+            git push
+          fi
