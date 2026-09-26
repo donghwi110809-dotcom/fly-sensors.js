@@ -2,131 +2,303 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1,viewport-fit=cover"
-  >
+  <title>FlyBrain × S.U.R.F.</title>
 
-  <title>FlyBrain × Microsoft Edge S.U.R.F.</title>
+  <link rel="stylesheet" href="./resources/css/interface.css">
 
-  <!-- =========================
-       Microsoft Edge S.U.R.F.
-       ========================= -->
+  <style>
+    #fly-debug-panel {
+      position: fixed !important;
+      top: 10px !important;
+      right: 10px !important;
+      width: 190px !important;
+      padding: 12px !important;
 
-  <link
-    rel="stylesheet"
-    href="./resources/css/interface.css"
-  >
+      z-index: 2147483647 !important;
 
-  <!-- S.U.R.F. 기본 스크립트 -->
+      background: rgba(5, 10, 18, .94) !important;
+      color: white !important;
 
-  <script
-    src="./resources/js/base-error-reporting.js">
-  </script>
+      border: 2px solid #62e891 !important;
+      border-radius: 14px !important;
 
-  <script
-    src="./resources/js/surf-error-reporting.js">
-  </script>
+      font-family: Arial, sans-serif !important;
 
-  <script
-    src="./resources/js/assert.js">
-  </script>
+      box-shadow:
+        0 8px 30px rgba(0,0,0,.5) !important;
+    }
 
-  <script
-    src="./resources/js/promise_resolver.js">
-  </script>
+    #fly-debug-panel h3 {
+      margin: 0 0 5px 0;
+      font-size: 15px;
+    }
 
-  <script
-    src="./resources/js/cr.js">
-  </script>
+    #fly-debug-panel p {
+      margin: 4px 0 8px 0;
+      font-size: 11px;
+      opacity: .8;
+    }
 
-  <script
-    src="./resources/js/parse_html_subset.js">
-  </script>
+    #fly-debug-panel button {
+      width: 100%;
+      margin-top: 5px;
+      padding: 8px;
 
-  <script
-    src="./resources/js/load_time_data.js">
-  </script>
+      border: 0;
+      border-radius: 8px;
 
-  <script
-    src="./resources/js/util.js">
-  </script>
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-  <script
-    src="./resources/js/strings.js">
-  </script>
+    #fly-start {
+      background: #62e891;
+    }
+
+    #fly-reset {
+      background: #ff7777;
+    }
+
+    #fly-test {
+      background: #eeeeee;
+    }
+
+    #fly-load-status {
+      margin-top: 8px;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    @media(max-width:600px) {
+      #fly-debug-panel {
+        width: 165px !important;
+        transform: scale(.88);
+        transform-origin: top right;
+      }
+    }
+  </style>
+
+
+  <!-- SURF 기본 모듈 -->
+
+  <script src="./resources/js/base-error-reporting.js"></script>
+  <script src="./resources/js/surf-error-reporting.js"></script>
+  <script src="./resources/js/assert.js"></script>
+  <script src="./resources/js/promise_resolver.js"></script>
+  <script src="./resources/js/cr.js"></script>
+  <script src="./resources/js/parse_html_subset.js"></script>
+  <script src="./resources/js/load_time_data.js"></script>
+  <script src="./resources/js/util.js"></script>
+  <script src="./resources/js/strings.js"></script>
 
 </head>
 
+
 <body>
 
-  <!-- =========================
-       S.U.R.F. 화면
-       ========================= -->
+  <!-- SURF -->
 
   <div id="hamburger-container"></div>
-
   <div id="modal-root"></div>
 
 
-  <!-- =========================
-       S.U.R.F. 게임 엔진
-       ========================= -->
+  <!--
+       이 패널은 JS와 상관없이
+       HTML 자체에서 무조건 표시된다.
+  -->
 
-  <script
-    defer
-    src="./resources/js/lib_react.chunk.js">
+  <div id="fly-debug-panel">
+
+    <h3>🪰 FlyBrain × S.U.R.F.</h3>
+
+    <p>Fruit-fly learning controller</p>
+
+    <button id="fly-start">
+      ▶ AI 시작
+    </button>
+
+    <button id="fly-reset">
+      ↺ 학습 초기화
+    </button>
+
+    <button id="fly-test">
+      ⚡ BOOST 테스트
+    </button>
+
+    <div id="fly-load-status">
+      AI 모듈 확인 중...
+    </div>
+
+  </div>
+
+
+
+  <!-- ====================== -->
+  <!-- SURF GAME -->
+  <!-- ====================== -->
+
+  <script defer src="./resources/js/lib_react.chunk.js"></script>
+
+  <script defer src="./resources/js/lib_common.chunk.js"></script>
+
+  <script defer src="./resources/js/surf.bundle.js"></script>
+
+
+
+  <!-- ====================== -->
+  <!-- FLY BRAIN -->
+  <!-- ====================== -->
+
+  <script defer src="./fly-sensors.js"></script>
+
+  <script defer src="./fly-brain.js"></script>
+
+  <script defer src="./fly-learning.js"></script>
+
+  <script defer src="./fly-controller.js"></script>
+
+
+
+  <!-- ====================== -->
+  <!-- FALLBACK CONTROLLER -->
+  <!-- ====================== -->
+
+  <script>
+
+    window.addEventListener("load", function () {
+
+      const status =
+        document.getElementById("fly-load-status");
+
+
+      function checkModules() {
+
+        const sensors =
+          !!window.FlySensors;
+
+        const brain =
+          !!window.FlyBrain;
+
+        const learning =
+          !!window.FlyLearning;
+
+        const controller =
+          !!window.FlyController;
+
+
+        status.innerHTML =
+          "Sensors: " + (sensors ? "✅" : "❌") +
+          "<br>Brain: " + (brain ? "✅" : "❌") +
+          "<br>Learning: " + (learning ? "✅" : "❌") +
+          "<br>Controller: " + (controller ? "✅" : "❌");
+
+      }
+
+
+      setTimeout(checkModules, 1000);
+
+      setInterval(checkModules, 3000);
+
+
+
+      document
+        .getElementById("fly-start")
+        .addEventListener("click", function () {
+
+          if (window.FlyController) {
+
+            FlyController.toggle();
+
+          } else {
+
+            alert(
+              "FlyController가 로딩되지 않았습니다."
+            );
+
+          }
+
+        });
+
+
+
+      document
+        .getElementById("fly-reset")
+        .addEventListener("click", function () {
+
+          if (
+            window.FlyController &&
+            FlyController.resetLearning
+          ) {
+
+            FlyController.resetLearning();
+
+          }
+
+          else if (
+            window.FlyLearning &&
+            FlyLearning.resetLearning
+          ) {
+
+            FlyLearning.resetLearning();
+
+          }
+
+          else if (
+            window.FlyBrain &&
+            FlyBrain.resetLearning
+          ) {
+
+            FlyBrain.resetLearning();
+
+          }
+
+          else {
+
+            alert(
+              "초기화할 AI 모듈을 찾지 못했습니다."
+            );
+
+          }
+
+        });
+
+
+
+      document
+        .getElementById("fly-test")
+        .addEventListener("click", function () {
+
+          const options = {
+            key: "f",
+            code: "KeyF",
+            bubbles: true
+          };
+
+          document.dispatchEvent(
+            new KeyboardEvent(
+              "keydown",
+              options
+            )
+          );
+
+          setTimeout(function () {
+
+            document.dispatchEvent(
+              new KeyboardEvent(
+                "keyup",
+                options
+              )
+            );
+
+          }, 100);
+
+        });
+
+    });
+
   </script>
-
-  <script
-    defer
-    src="./resources/js/lib_common.chunk.js">
-  </script>
-
-  <script
-    defer
-    src="./resources/js/surf.bundle.js">
-  </script>
-
-
-  <!-- =========================
-       🪰 FlyBrain AI
-       순서 바꾸지 말 것
-       ========================= -->
-
-
-  <!-- 1. 감각 시스템 -->
-
-  <script
-    defer
-    src="./fly-sensors.js">
-  </script>
-
-
-  <!-- 2. 초파리 신경망 -->
-
-  <script
-    defer
-    src="./fly-brain.js">
-  </script>
-
-
-  <!-- 3. 강화학습 -->
-
-  <script
-    defer
-    src="./fly-learning.js">
-  </script>
-
-
-  <!-- 4. 게임 제어 + AI 패널 -->
-
-  <script
-    defer
-    src="./fly-controller.js">
-  </script>
-
 
 </body>
 </html>
