@@ -69,7 +69,7 @@ function ui(){
  update();bootTimer=setInterval(()=>{if(ready()){clearInterval(bootTimer);bootTimer=null;start()}},250);
 }
 function update(){const e=$("#fly-stats");if(!e)return;const s=window.FlySensors?FlySensors.getState():{},b=window.FlyBrain?FlyBrain.getStats():{},l=window.FlyLearning?FlyLearning.getStats():{},danger=Math.max(s.dangerLeft||0,s.dangerCenter||0,s.dangerRight||0);const text=($("#score-text")?.textContent||"0").replace(/,/g,"");const score=Math.max(0,parseInt(text,10)||0);
- const nativeBest=[...document.querySelectorAll("#modal-root p")].find(p=>/best score|최고 점수/i.test(p.textContent||""));
+ const nativeBest=[...document.querySelectorAll("p")].find(p=>/best score|최고 점수/i.test(p.textContent||""));
  const nativeValue=nativeBest?Number((nativeBest.textContent.replace(/,/g,"").match(/\d+/)||[0])[0]):0;
  const newBest=Math.max(bestScore,score,nativeValue);
  if(newBest!==bestScore){bestScore=newBest;try{localStorage.setItem(BEST_KEY,String(bestScore))}catch{}}
