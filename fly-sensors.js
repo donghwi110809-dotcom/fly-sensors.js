@@ -3,18 +3,19 @@
 const N=35, S={frame:0,dangerLeft:0,dangerCenter:0,dangerRight:0,nearestDanger:1,obstacleCount:0,gameState:"menu",score:0,lastScore:0};
 const bg=[56,194,238];
 function canvas(){return [...document.querySelectorAll("canvas")].sort((a,b)=>b.width*b.height-a.width*a.height)[0]||null}
-function visible(el){if(!el)return false;const s=getComputedStyle(el);return s.visibility!=="hidden"&&s.display!=="none"&&s.opacity!=="0"}
+function visible(el){if(!el)return false;const s=getComputedStyle(el);return el.getClientRects().length>0&&s.visibility!=="hidden"&&s.display!=="none"&&s.opacity!=="0"}
 function gameState(){
- const ins=document.querySelector(".instruct-content"), title=document.querySelector(".ui-title");
+ const ins=document.querySelector("#instruct-content"), title=document.querySelector("#ui-title");
  if(visible(ins)){
    const t=(ins.textContent||"").toLowerCase();
-   if(S.frame>5 && (/again|restart|다시|재시작|game over|게임 오버/.test(t))) return "over";
-   if(visible(title)) return "menu";
+   if((/again|restart|다시|재시작|game over|게임 오버/.test(t))) return "over";
+   if(/resume|continue|계속|재개/.test(t)) return "paused";
+   return "menu";
  }
  return "play";
 }
 function score(){
- const t=document.querySelector(".score-text");
+ const t=document.querySelector("#score-text");
  const m=t&&(t.textContent||"").match(/[\d,.]+/);
  return m?Number(m[0].replace(/,/g,""))||0:S.score;
 }
