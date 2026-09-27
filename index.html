@@ -1,304 +1,56 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-
-  <title>FlyBrain × S.U.R.F.</title>
-
-  <link rel="stylesheet" href="./resources/css/interface.css">
-
-  <style>
-    #fly-debug-panel {
-      position: fixed !important;
-      top: 10px !important;
-      right: 10px !important;
-      width: 190px !important;
-      padding: 12px !important;
-
-      z-index: 2147483647 !important;
-
-      background: rgba(5, 10, 18, .94) !important;
-      color: white !important;
-
-      border: 2px solid #62e891 !important;
-      border-radius: 14px !important;
-
-      font-family: Arial, sans-serif !important;
-
-      box-shadow:
-        0 8px 30px rgba(0,0,0,.5) !important;
-    }
-
-    #fly-debug-panel h3 {
-      margin: 0 0 5px 0;
-      font-size: 15px;
-    }
-
-    #fly-debug-panel p {
-      margin: 4px 0 8px 0;
-      font-size: 11px;
-      opacity: .8;
-    }
-
-    #fly-debug-panel button {
-      width: 100%;
-      margin-top: 5px;
-      padding: 8px;
-
-      border: 0;
-      border-radius: 8px;
-
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    #fly-start {
-      background: #62e891;
-    }
-
-    #fly-reset {
-      background: #ff7777;
-    }
-
-    #fly-test {
-      background: #eeeeee;
-    }
-
-    #fly-load-status {
-      margin-top: 8px;
-      font-size: 11px;
-      line-height: 1.5;
-    }
-
-    @media(max-width:600px) {
-      #fly-debug-panel {
-        width: 165px !important;
-        transform: scale(.88);
-        transform-origin: top right;
-      }
-    }
-  </style>
-
-
-  <!-- SURF 기본 모듈 -->
-
-  <script src="./resources/js/base-error-reporting.js"></script>
-  <script src="./resources/js/surf-error-reporting.js"></script>
-  <script src="./resources/js/assert.js"></script>
-  <script src="./resources/js/promise_resolver.js"></script>
-  <script src="./resources/js/cr.js"></script>
-  <script src="./resources/js/parse_html_subset.js"></script>
-  <script src="./resources/js/load_time_data.js"></script>
-  <script src="./resources/js/util.js"></script>
-  <script src="./resources/js/strings.js"></script>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FlyBrain × Microsoft Edge S.U.R.F.</title>
+<link rel="stylesheet" href="./resources/css/interface.css">
+<style>
+#fly-ai-panel{position:fixed;z-index:2147483647;top:10px;left:10px;width:190px;padding:12px;background:rgba(8,12,20,.92);color:white;border:2px solid #49d17d;border-radius:14px;font-family:system-ui,sans-serif;font-size:12px}
+#fly-ai-panel .title{font-size:15px;font-weight:800;margin-bottom:8px}
+#fly-ai-panel button{padding:8px 10px;margin:3px;border:0;border-radius:8px;font-weight:700}
+#ai-toggle{background:#49d17d}#ai-boost{background:#ffd45c}
+#ai-status{margin-top:8px;line-height:1.45}
+#brain-bar{height:5px;margin-top:7px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden}
+#brain-activity{width:10%;height:100%;background:#49d17d}
+</style>
+<script src="./resources/js/base-error-reporting.js"></script>
+<script src="./resources/js/surf-error-reporting.js"></script>
+<script src="./resources/js/assert.js"></script>
+<script src="./resources/js/promise_resolver.js"></script>
+<script src="./resources/js/cr.js"></script>
+<script src="./resources/js/parse_html_subset.js"></script>
+<script src="./resources/js/load_time_data.js"></script>
+<script src="./resources/js/util.js"></script>
+<script src="./resources/js/strings.js"></script>
 </head>
-
-
 <body>
-
-  <!-- SURF -->
-
-  <div id="hamburger-container"></div>
-  <div id="modal-root"></div>
-
-
-  <!--
-       이 패널은 JS와 상관없이
-       HTML 자체에서 무조건 표시된다.
-  -->
-
-  <div id="fly-debug-panel">
-
-    <h3>🪰 FlyBrain × S.U.R.F.</h3>
-
-    <p>Fruit-fly learning controller</p>
-
-    <button id="fly-start">
-      ▶ AI 시작
-    </button>
-
-    <button id="fly-reset">
-      ↺ 학습 초기화
-    </button>
-
-    <button id="fly-test">
-      ⚡ BOOST 테스트
-    </button>
-
-    <div id="fly-load-status">
-      AI 모듈 확인 중...
-    </div>
-
-  </div>
-
-
-
-  <!-- ====================== -->
-  <!-- SURF GAME -->
-  <!-- ====================== -->
-
-  <script defer src="./resources/js/lib_react.chunk.js"></script>
-
-  <script defer src="./resources/js/lib_common.chunk.js"></script>
-
-  <script defer src="./resources/js/surf.bundle.js"></script>
-
-
-
-  <!-- ====================== -->
-  <!-- FLY BRAIN -->
-  <!-- ====================== -->
-
-  <script defer src="./fly-sensors.js"></script>
-
-  <script defer src="./fly-brain.js"></script>
-
-  <script defer src="./fly-learning.js"></script>
-
-  <script defer src="./fly-controller.js"></script>
-
-
-
-  <!-- ====================== -->
-  <!-- FALLBACK CONTROLLER -->
-  <!-- ====================== -->
-
-  <script>
-
-    window.addEventListener("load", function () {
-
-      const status =
-        document.getElementById("fly-load-status");
-
-
-      function checkModules() {
-
-        const sensors =
-          !!window.FlySensors;
-
-        const brain =
-          !!window.FlyBrain;
-
-        const learning =
-          !!window.FlyLearning;
-
-        const controller =
-          !!window.FlyController;
-
-
-        status.innerHTML =
-          "Sensors: " + (sensors ? "✅" : "❌") +
-          "<br>Brain: " + (brain ? "✅" : "❌") +
-          "<br>Learning: " + (learning ? "✅" : "❌") +
-          "<br>Controller: " + (controller ? "✅" : "❌");
-
-      }
-
-
-      setTimeout(checkModules, 1000);
-
-      setInterval(checkModules, 3000);
-
-
-
-      document
-        .getElementById("fly-start")
-        .addEventListener("click", function () {
-
-          if (window.FlyController) {
-
-            FlyController.toggle();
-
-          } else {
-
-            alert(
-              "FlyController가 로딩되지 않았습니다."
-            );
-
-          }
-
-        });
-
-
-
-      document
-        .getElementById("fly-reset")
-        .addEventListener("click", function () {
-
-          if (
-            window.FlyController &&
-            FlyController.resetLearning
-          ) {
-
-            FlyController.resetLearning();
-
-          }
-
-          else if (
-            window.FlyLearning &&
-            FlyLearning.resetLearning
-          ) {
-
-            FlyLearning.resetLearning();
-
-          }
-
-          else if (
-            window.FlyBrain &&
-            FlyBrain.resetLearning
-          ) {
-
-            FlyBrain.resetLearning();
-
-          }
-
-          else {
-
-            alert(
-              "초기화할 AI 모듈을 찾지 못했습니다."
-            );
-
-          }
-
-        });
-
-
-
-      document
-        .getElementById("fly-test")
-        .addEventListener("click", function () {
-
-          const options = {
-            key: "f",
-            code: "KeyF",
-            bubbles: true
-          };
-
-          document.dispatchEvent(
-            new KeyboardEvent(
-              "keydown",
-              options
-            )
-          );
-
-          setTimeout(function () {
-
-            document.dispatchEvent(
-              new KeyboardEvent(
-                "keyup",
-                options
-              )
-            );
-
-          }, 100);
-
-        });
-
-    });
-
-  </script>
-
+<div id="hamburger-container"></div>
+<div id="modal-root"></div>
+<div id="fly-ai-panel">
+<div class="title">🪰 FlyBrain AI</div>
+<button id="ai-toggle">AI 시작</button>
+<button id="ai-boost">BOOST</button>
+<div id="ai-status">SURF 로딩 중...</div>
+<div id="brain-bar"><div id="brain-activity"></div></div>
+</div>
+<script defer src="./resources/js/lib_react.chunk.js"></script>
+<script defer src="./resources/js/lib_common.chunk.js"></script>
+<script defer src="./resources/js/surf.bundle.js"></script>
+<script>
+(()=>{
+let running=false,timer=null,steps=0;
+const INPUTS=35,KENYON=96,OUTPUTS=4,w1=[],w2=[];
+for(let k=0;k<KENYON;k++){let r=[];for(let i=0;i<INPUTS;i++)r.push(Math.random()<.16?Math.random()*2-1:0);w1.push(r)}
+for(let o=0;o<OUTPUTS;o++){let r=[];for(let k=0;k<KENYON;k++)r.push(Math.random()*.2-.1);w2.push(r)}
+function press(code,key){let x={code,key,bubbles:true,cancelable:true};document.dispatchEvent(new KeyboardEvent("keydown",x));window.dispatchEvent(new KeyboardEvent("keydown",x));setTimeout(()=>{document.dispatchEvent(new KeyboardEvent("keyup",x));window.dispatchEvent(new KeyboardEvent("keyup",x))},90)}
+function sense(){let x=new Array(INPUTS).fill(0);x[0]=1;x[1]=Math.sin(steps*.08);x[2]=Math.cos(steps*.05);for(let i=3;i<INPUTS;i++)x[i]=Math.random()*2-1;return x}
+function brain(input){let h=new Array(KENYON).fill(0);for(let k=0;k<KENYON;k++){let s=0;for(let i=0;i<INPUTS;i++)s+=input[i]*w1[k][i];h[k]=s>1.25?s:0}let out=new Array(OUTPUTS).fill(0);for(let o=0;o<OUTPUTS;o++){let s=0;for(let k=0;k<KENYON;k++)s+=h[k]*w2[o][k];out[o]=s}return{hidden:h,output:out}}
+function step(){if(!running)return;steps++;let r=brain(sense()),a=0;for(let i=1;i<r.output.length;i++)if(r.output[i]>r.output[a])a=i;let n;if(a===0){press("ArrowLeft","ArrowLeft");n="← LEFT"}else if(a===1){press("ArrowRight","ArrowRight");n="→ RIGHT"}else if(a===2){press("ArrowDown","ArrowDown");n="↓ DOWN"}else{press("KeyF","f");n="⚡ BOOST"}let active=r.hidden.filter(v=>v>0).length;document.getElementById("brain-activity").style.width=Math.min(100,active/KENYON*300)+"%";document.getElementById("ai-status").innerHTML="상태: 실행 중<br>행동: "+n+"<br>신경 스텝: "+steps+"<br>활성 뉴런: "+active+"/"+KENYON}
+document.getElementById("ai-toggle").onclick=function(){running=!running;if(running){this.textContent="AI 정지";press("Space"," ");timer=setInterval(step,170)}else{this.textContent="AI 시작";clearInterval(timer);document.getElementById("ai-status").innerHTML="AI 정지<br>총 신경 스텝: "+steps}};
+document.getElementById("ai-boost").onclick=()=>press("KeyF","f");
+window.addEventListener("load",()=>setTimeout(()=>document.getElementById("ai-status").innerHTML="SURF 준비 완료<br>AI 시작을 누르세요.",1500));
+})();
+</script>
 </body>
 </html>
